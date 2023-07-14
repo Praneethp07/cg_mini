@@ -127,6 +127,41 @@ void displayMoral()
     glDisable(GL_TEXTURE_2D);
     glutSwapBuffers();
 }
+void sky(){
+  glPushMatrix();
+  glTranslatef(2500,3300,100);
+  glScalef(5000,3500,10);
+  glColor3f(0.49, 0.93, 0.99);
+  glutSolidCube(1.0);
+  glPopMatrix();
+}
+void grass(){
+    glPushMatrix();
+    glTranslatef(0,400,0);
+    int disp=0;
+    for(int i=0;i<100;i++){
+    glColor3f(0.31, 1, 0.11);
+    glBegin(GL_TRIANGLES);
+    glVertex2f(50+disp, 1550);   // Vertex 1 (top)
+    glVertex2f(0+disp, 1180); // Vertex 2 (bottom-left)
+    glVertex2f(100+disp, 1180);  // Vertex 3 (bottom-right)
+    glEnd();
+    disp+=50;
+    }
+    disp=0;
+    for(int i=0;i<100;i++){
+    glColor3f(0.07, 0.78, 0.04);
+    glBegin(GL_TRIANGLES);
+    glVertex2f(50+disp, 1680);   // Vertex 1 (top)
+    glVertex2f(0+disp, 1310); // Vertex 2 (bottom-left)
+    glVertex2f(100+disp, 1310);  // Vertex 3 (bottom-right)
+    glEnd();
+    disp+=50;
+    }
+    glPopMatrix();
+
+
+}
 void river()
 {
     glColor4f(0, 0,1,0.1);
@@ -137,6 +172,28 @@ void river()
     glVertex2f(5000, 0);
     glEnd();
 }
+void rocks(float x,float y){
+  glPushMatrix();
+  glColor3f(0.68, 0.66, 0.64);
+  if(x == 0){
+    glTranslatef(300,y+200,0);
+  }else{
+    glTranslatef(x+1000,y+200,0);
+  }
+  glScalef(300,200,0);
+  glutSolidSphere(1.0,40,40);
+  glPopMatrix();
+  glPushMatrix();
+  glColor3f(0.68, 0.66, 0.64);
+  if(x == 0){
+    glTranslatef(1500,y-60+200,0);
+  }else{
+    glTranslatef(x+500+1500,y-60+200,0);
+  }
+  glScalef(200,100,0);
+  glutSolidSphere(1.0,40,40);
+  glPopMatrix();
+}
 void river2(){
   glPushMatrix();
   glTranslatef(2500,500,-5);
@@ -146,10 +203,14 @@ void river2(){
   glPopMatrix();
 }
 void grassGround(){
+  rocks(1000,1400);
+  rocks(0,1400);
+  rocks(2500,1400);
+  grass();
   glPushMatrix();
   glTranslatef(2500,1400,-6);
   glScalef(5000,500,100);
-  glColor3f(0.18, 0.75, 0.1);
+  glColor3f(0.54, 0.34, 0.11);
   glutSolidCube(1.0);
   glPopMatrix();
 }
@@ -163,12 +224,54 @@ glScalef(500,2000,100);
 glPopMatrix();
 }
 
+void leaves(){
+  glPushMatrix();
+  glTranslatef(4000,4200,-6);
+  glScalef(1400,1400,100);
+  glColor3f(0.18, 0.75, 0.1);
+  glutSolidSphere(0.5f,40,40);
+  glPopMatrix();
+  glPushMatrix();
+  glTranslatef(3600,3800,-6);
+  glScalef(1400,1400,100);
+  glColor3f(0.18, 0.75, 0.1);
+  glutSolidSphere(0.5f,40,40);
+  glPopMatrix();
+  glPushMatrix();
+  glTranslatef(3300,3000,-6);
+  glScalef(1400,1400,100);
+  glColor3f(0.18, 0.75, 0.1);
+  glutSolidSphere(0.5f,40,40);
+  glPopMatrix();
+  glPushMatrix();
+  glTranslatef(4600,2800,-6);
+  glScalef(1200,1000,100);
+  glColor3f(0.18, 0.75, 0.1);
+  glutSolidSphere(0.5f,40,40);
+  glPopMatrix();
+}
+void Tree1(){
+  leaves();
+  glPushMatrix();
+  glTranslatef(4000,3600,0);
+  glScalef(500,500,-10);
+  glColor3f(0.18, 0.75, 0.1);
+  glutSolidSphere(2.1f,40,40);
+  glPopMatrix();
+}
+
+void treeTrunk(){
+    glColor3f(0.4, 0.2, 0.0);
+    glRectf(3800, 1500, 4100, 2595);
+    glEnd();
+}
 
 void displayScene1()
 {
-
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    river2();
+    Tree1();
+    treeTrunk();
+      sky();
     grassGround();
     river2();
     Crocodile crocodile;
@@ -272,6 +375,11 @@ void displayScene2()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDisable(GL_TEXTURE_2D);
+    Tree1();
+    treeTrunk();
+      sky();
+    grassGround();
+    river2();
     Crocodile crocodile;
     Apple apple;
     crocodile.draw(cXpos, 1000, 270, 0.8);
@@ -371,6 +479,11 @@ void displayScene3()
 {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    Tree1();
+    treeTrunk();
+      sky();
+    grassGround();
+    river2();
     Monkey monkey;
     monkey.drawMonkey(mxpos, mypos, 0.5);
     Crocodile crocodile;
@@ -476,6 +589,11 @@ void displayScene4()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDisable(GL_TEXTURE_2D);
+    Tree1();
+    treeTrunk();
+      sky();
+    grassGround();
+    river2();
     Crocodile crocodile;
     Monkey monkey;
     crocodile.draw(cXpos, 1000, 270);
@@ -560,6 +678,11 @@ void displayScene4()
 void displayScene5()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    Tree1();
+    treeTrunk();
+      sky();
+    grassGround();
+    river2();
     Monkey monkey;
     monkey.drawMonkey(mxpos, mypos, 0.5);
     Crocodile crocodile;
