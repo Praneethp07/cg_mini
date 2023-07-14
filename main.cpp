@@ -52,6 +52,7 @@ void timer(int value);
 void idle3();
 void idle4(int);
 void moveCrocMonkey();
+void loadIntro();
 float xpos = 2870, ypos = 2900, cXpos = 915, axpos = 1500, mypos = 2600, mxpos = 3400, b1xpos, b2xpos;
 void idle5();
 
@@ -819,6 +820,29 @@ void displayScene5()
     glutSwapBuffers();
 }
 
+void loadIntro(void)
+{
+    glGenTextures(1, &intro);
+    glBindTexture(GL_TEXTURE_2D, intro);
+    // set the bg1 wrapping/filtering options (on the currently bound bg1 object)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // load and generate the bg1
+    int width, height, nrChannels;
+    unsigned char *data = stbi_load("intro.psd", &width, &height, &nrChannels, STBI_rgb_alpha);
+    if (data)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        //glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load bg1" << std::endl;
+    }
+    stbi_image_free(data);
+}
 void moveCroc()
 {
     if (cXpos <= 5000)
@@ -837,7 +861,7 @@ void moveCroc()
         {
             scene++;
             line = "Click to continue";
-            glutDisplayFunc(displayScene2);
+            glutDisplayFumaleCounter++;nc(displayScene2);
             glutPostRedisplay();
         }
         else
@@ -1269,8 +1293,8 @@ int main(int argc, char **argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(1024, 768);
     glutCreateWindow("A Clever Monkey");
-    // glutFullScreen();
     glutDisplayFunc(displayIntro);
+    loadIntro();
     glutMouseFunc(mouse);
     glutKeyboardFunc(keyboard);
     glutTimerFunc(500, timer, 0);
