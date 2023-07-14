@@ -104,7 +104,7 @@ public:
     void drawMonkey(int xpos, int ypos, float scale, int rotAngle)
     {
         glPushMatrix();
-        glTranslatef(xpos, ypos, 0);
+        glTranslatef(xpos, ypos, -100);
         glRotatef(rotAngle, 0, 0, 1);
         glScalef(scale, scale, scale);
         drawFace();

@@ -16,7 +16,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #include "crocodile.hpp"
-unsigned int bg1, bg2, bg3, intro, moral;
+unsigned int intro, moral;
 int scene = 0;
 bool appleMove = false;
 bool appleDown = false;
@@ -135,9 +135,22 @@ void sky(){
   glutSolidCube(1.0);
   glPopMatrix();
 }
-void grass(){
+void grass(int i){
     glPushMatrix();
-    glTranslatef(0,400,0);
+    if(i == 1){
+      glTranslatef(0,400,0);
+    }else if(i==2){
+      glTranslatef(0,700,5);
+    }
+    else if(i==3){
+      glTranslatef(0,500,5);
+    }
+    else if(i==4){
+      glTranslatef(0,500,100);
+    }
+    else if(i==5){
+      glTranslatef(0,500,0);
+    }
     int disp=0;
     for(int i=0;i<100;i++){
     glColor3f(0.31, 1, 0.11);
@@ -202,17 +215,36 @@ void river2(){
   glutSolidCube(1.0);
   glPopMatrix();
 }
-void grassGround(){
-  rocks(1000,1400);
-  rocks(0,1400);
-  rocks(2500,1400);
-  grass();
+void river3(){
+  glBegin(GL_POLYGON);
+  glColor3f(0.08, 0.5, 0.85);
+  glVertex3f(0, 2000, 10);
+  glVertex3f(5000, 2000, 10);
+  glVertex3f(5000,0, 10);
+  glVertex3f(0, 0, 10);
+  glEnd();
+
+}
+void grassGround(int i){
+
+  grass(i);
+  if(i==1){
   glPushMatrix();
   glTranslatef(2500,1400,-6);
   glScalef(5000,500,100);
   glColor3f(0.54, 0.34, 0.11);
   glutSolidCube(1.0);
   glPopMatrix();
+}
+  else if(i==3 || i == 2){
+    glBegin(GL_POLYGON);
+    glColor3f(0.54, 0.35, 0.12);
+    glVertex3f(0, 2000, 10);
+    glVertex3f(5000, 2000, 10);
+    glVertex3f(5000,1500, 10);
+    glVertex3f(0, 1500, 10);
+    glEnd();
+  }
 }
 
 void Tree(){
@@ -260,19 +292,32 @@ void Tree1(){
   glPopMatrix();
 }
 
-void treeTrunk(){
-    glColor3f(0.4, 0.2, 0.0);
-    glRectf(3800, 1500, 4100, 2595);
-    glEnd();
+void treeTrunk(int i){
+    if(i == 1){
+      glColor3f(0.4, 0.2, 0.0);
+      glRectf(3800, 1700, 4100, 2595);
+      glEnd();
+    }else{
+      glPushMatrix();
+      glColor3f(0.4, 0.2, 0.0);
+      glTranslatef(0,500,10);
+      glRectf(3800, 1400, 4100, 2595);
+      glEnd();
+      glPopMatrix();
+    }
+
 }
 
 void displayScene1()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    rocks(1000,1400);
+    rocks(0,1400);
+    rocks(2900,1400);
     Tree1();
-    treeTrunk();
+    treeTrunk(1);
       sky();
-    grassGround();
+    grassGround(1);
     river2();
     Crocodile crocodile;
     crocodile.draw(cXpos, 450, 280);
@@ -354,34 +399,33 @@ void displayScene1()
 
     }
     drawtext(1300, 3800, line,true,false);
-    glEnable(GL_TEXTURE_2D);
-    glColor3f(1, 1, 1);
-    // glBindTexture(GL_TEXTURE_2D, bg1);
-    // glBegin(GL_QUADS);
-    // glVertex3f(0, 0, 10);
-    // glTexCoord2f(0, 0);
-    // glVertex3f(0, 5000, 10);
-    // glTexCoord2f(0, 1);
-    // glVertex3f(5000, 5000, 10);
-    // glTexCoord2f(1, 1);
-    // glVertex3f(5000, 0, 10);
-    // glTexCoord2f(1, 0);
-    // glEnd();
     glFlush();
     glDisable(GL_TEXTURE_2D);
     glutSwapBuffers();
 }
+void sky1(){
+  glBegin(GL_POLYGON);
+  glColor3f(0.49, 0.93, 0.99);
+  glVertex3f(0, 5000, 10);
+  glVertex3f(5000, 5000, 10);
+  glVertex3f(5000, 2000, 10);
+  glVertex3f(0, 2000, 10);
+  glEnd();
+}
 void displayScene2()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glDisable(GL_TEXTURE_2D);
-    Tree1();
-    treeTrunk();
-      sky();
-    grassGround();
-    river2();
+    sky1();
+    grassGround(2);
+    //river
+    rocks(0,1700);
+    rocks(3000,7800);
+    rocks(1000,1700);
+    rocks(2000,1700);
+    river3();
     Crocodile crocodile;
     Apple apple;
+    glDisable(GL_TEXTURE_2D);
     crocodile.draw(cXpos, 1000, 270, 0.8);
     if (displayCloudS2)
     {
@@ -457,33 +501,29 @@ void displayScene2()
         }
     }
     drawtext(1700, 4000, line,true,false);
-    glEnable(GL_TEXTURE_2D);
-    glColor3f(1, 1, 1);
-    glBindTexture(GL_TEXTURE_2D, bg2);
-    glBegin(GL_QUADS);
-    glVertex3f(0, 0, 10);
-    glTexCoord2f(0, 0);
-    glVertex3f(0, 5000, 10);
-    glTexCoord2f(0, 1);
-    glVertex3f(5000, 5000, 10);
-    glTexCoord2f(1, 1);
-    glVertex3f(5000, 0, 10);
-    glTexCoord2f(1, 0);
-    glEnd();
     glFlush();
     glDisable(GL_TEXTURE_2D);
     glutSwapBuffers();
 }
 
-void displayScene3()
-{
+void treetop(){
+  Circle circle;
+  circle.setColor(0.11, 0.62, 0.04);
+  circle.draw(900,4000,3900,10,false,0,360);
+  circle.draw(600,3500,3300,10,false,0,360);
+  circle.draw(700,3900,4000,10,false,0,360);
+  circle.draw(600,4500,3300,10,false,0,360);
+}
 
+void displayScene3(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    Tree1();
-    treeTrunk();
-      sky();
-    grassGround();
-    river2();
+    treetop();
+    rocks(-500,1500);
+    rocks(3500,1500);
+    treeTrunk(3);
+    sky1();
+    grassGround(3);
+    river3();
     Monkey monkey;
     monkey.drawMonkey(mxpos, mypos, 0.5);
     Crocodile crocodile;
@@ -567,33 +607,65 @@ void displayScene3()
         }
     }
     drawtext(1300, 3800, line,true,false);
-    glEnable(GL_TEXTURE_2D);
-    glColor3f(1, 1, 1);
-    glBindTexture(GL_TEXTURE_2D, bg1);
-    glBegin(GL_QUADS);
-    glVertex3f(0, 0, 10);
-    glTexCoord2f(0, 0);
-    glVertex3f(0, 5000, 10);
-    glTexCoord2f(0, 1);
-    glVertex3f(5000, 5000, 10);
-    glTexCoord2f(1, 1);
-    glVertex3f(5000, 0, 10);
-    glTexCoord2f(1, 0);
-    glEnd();
     glFlush();
     glDisable(GL_TEXTURE_2D);
     glutSwapBuffers();
+}
+
+void birds(float x, float y)
+{
+    glPushMatrix();
+    glTranslatef(x, y, 0.0f);
+    glScalef(180,180,10);
+    glBegin(GL_TRIANGLES);
+
+    // Draw bird's body
+    glColor3f(0.2f, 0.4f, 0.6f); // Set color for body
+    glVertex2f(-0.2f, 0.0f);     // Left vertex of body
+    glVertex2f(0.0f, 0.2f);      // Top vertex of body
+    glVertex2f(0.2f, 0.0f);      // Right vertex of body
+
+    // Draw bird's head
+    glColor3f(0.8f, 0.2f, 0.2f); // Set color for head
+    glVertex2f(0.0f, 0.2f);      // Top vertex of head
+    glVertex2f(0.2f, 0.0f);      // Right vertex of head
+    glVertex2f(0.4f, 0.1f);      // Right vertex of beak
+
+    glEnd();
+
+    glBegin(GL_LINES);
+
+    // Draw bird's legs
+    glColor3f(0.0f, 0.0f, 0.0f); // Set color for legs
+    glVertex2f(0.1f, -0.1f);     // Left leg
+    glVertex2f(0.1f, -0.3f);
+
+    glVertex2f(0.3f, -0.1f);     // Right leg
+    glVertex2f(0.3f, -0.3f);
+
+    glEnd();
+
+    glPopMatrix();
 }
 
 void displayScene4()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDisable(GL_TEXTURE_2D);
-    Tree1();
-    treeTrunk();
-      sky();
-    grassGround();
-    river2();
+    sky1();
+    birds(100,4200);
+    birds(200,4200);
+    birds(1000,4200);
+    birds(1100,4300);
+    birds(2300,4000);
+    birds(1500,4100);
+    birds(2500,4200);
+    birds(2800,4300);
+    birds(3500,4200);
+    birds(3800,4300);
+    birds(3000,4000);
+    birds(4500,4100);
+    river3();
     Crocodile crocodile;
     Monkey monkey;
     crocodile.draw(cXpos, 1000, 270);
@@ -657,19 +729,6 @@ void displayScene4()
         }
     }
     drawtext(1700, 4000, line,true,false);
-    glEnable(GL_TEXTURE_2D);
-    glColor3f(1, 1, 1);
-    glBindTexture(GL_TEXTURE_2D, bg2);
-    glBegin(GL_QUADS);
-    glVertex3f(0, 0, 10);
-    glTexCoord2f(0, 0);
-    glVertex3f(0, 5000, 10);
-    glTexCoord2f(0, 1);
-    glVertex3f(5000, 5000, 10);
-    glTexCoord2f(1, 1);
-    glVertex3f(5000, 0, 10);
-    glTexCoord2f(1, 0);
-    glEnd();
     glFlush();
     glDisable(GL_TEXTURE_2D);
     glutSwapBuffers();
@@ -678,11 +737,13 @@ void displayScene4()
 void displayScene5()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    Tree1();
-    treeTrunk();
-      sky();
-    grassGround();
-    river2();
+    treetop();
+    treeTrunk(5);
+    rocks(0,1500);
+    rocks(2900,1500);
+    sky1();
+    grassGround(3);
+    river3();
     Monkey monkey;
     monkey.drawMonkey(mxpos, mypos, 0.5);
     Crocodile crocodile;
@@ -740,7 +801,7 @@ void displayScene5()
     if(displayMoralS5==true)
     {
         elipse.setColor(0,0.5,0.5);
-        elipse.draw(2500,2500,2000,1000,1,false,0,360);
+        elipse.draw(2500,2500,2000,1000,-10,false,0,360);
         drawtext(1300,2500,"Friendship is beautiful.Treasure it....dont misuse it",false,true);
         glutTimerFunc(5000,timer,0);
         glutDisplayFunc(displayMoral);
@@ -753,19 +814,6 @@ void displayScene5()
     apple.draw(3400, 3800, 1);
     apple.draw(3000, 3800, 1);
     apple.draw(2600, 3100, 1);
-    glEnable(GL_TEXTURE_2D);
-    glColor3f(1, 1, 1);
-    glBindTexture(GL_TEXTURE_2D, bg1);
-    glBegin(GL_QUADS);
-    glVertex3f(0, 0, 10);
-    glTexCoord2f(0, 0);
-    glVertex3f(0, 5000, 10);
-    glTexCoord2f(0, 1);
-    glVertex3f(5000, 5000, 10);
-    glTexCoord2f(1, 1);
-    glVertex3f(5000, 0, 10);
-    glTexCoord2f(1, 0);
-    glEnd();
     glFlush();
     glDisable(GL_TEXTURE_2D);
     glutSwapBuffers();
@@ -1152,156 +1200,6 @@ void mouse(int button, int state, int x, int y)
     }
 }
 
-void loadIntro(void)
-{
-    glGenTextures(1, &intro);
-    glBindTexture(GL_TEXTURE_2D, intro);
-    // set the bg1 wrapping/filtering options (on the currently bound bg1 object)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // load and generate the bg1
-    int width, height, nrChannels;
-    unsigned char *data = stbi_load("Front_Sheet.psd", &width, &height, &nrChannels, STBI_rgb_alpha);
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        //glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load bg1" << std::endl;
-    }
-    stbi_image_free(data);
-}
-
-void loadMoral(void)
-{
-    glGenTextures(1, &moral);
-    glBindTexture(GL_TEXTURE_2D, moral);
-    // set the bg1 wrapping/filtering options (on the currently bound bg1 object)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // load and generate the bg1
-    int width, height, nrChannels;
-    unsigned char *data = stbi_load("moral.psd", &width, &height, &nrChannels, STBI_rgb_alpha);
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        //glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load bg1" << std::endl;
-    }
-    stbi_image_free(data);
-}
-
-// void loadBackground(void)
-// {
-//     glGenTextures(1, &bg1);
-//     glBindTexture(GL_TEXTURE_2D, bg1);
-//     // set the bg1 wrapping/filtering options (on the currently bound bg1 object)
-//     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-//     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-//     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//     // load and generate the bg1
-//     int width, height, nrChannels;
-//     unsigned char *data = stbi_load("background1.psd", &width, &height, &nrChannels, STBI_rgb_alpha);
-//     if (data)
-//     {
-//         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-//         //glGenerateMipmap(GL_TEXTURE_2D);
-//     }
-//     else
-//     {
-//         std::cout << "Failed to load bg1" << std::endl;
-//     }
-//     stbi_image_free(data);
-// }
-
-void loadBackground(void)
-{
-    // Generate a texture ID for the background
-    glGenTextures(1, &bg1);
-    glBindTexture(GL_TEXTURE_2D, bg1);
-
-    // Set the texture wrapping/filtering options (on the currently bound texture object)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    // Render the river scene directly
-    river();
-
-    // Get the rendered scene data from the framebuffer
-    int width = 5000;
-    int height = 5000;
-    unsigned char* data = (unsigned char*)malloc(width * height * 4);
-
-    glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
-
-    // Create the texture from the scene data
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-
-    // Free the allocated data
-    free(data);
-}
-
-
-void loadBackground2(void)
-{
-    glGenTextures(1, &bg2);
-    glBindTexture(GL_TEXTURE_2D, bg2);
-    // set the bg1 wrapping/filtering options (on the currently bound bg1 object)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // load and generate the bg1
-    int width, height, nrChannels;
-    unsigned char *data = stbi_load("Scene_2_Final.png", &width, &height, &nrChannels, STBI_rgb_alpha);
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        //glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load bg1" << std::endl;
-    }
-    stbi_image_free(data);
-}
-
-void loadBackground3()
-{
-    glGenTextures(1, &bg3);
-    glBindTexture(GL_TEXTURE_2D, bg3);
-    // set the bg1 wrapping/filtering options (on the currently bound bg1 object)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // load and generate the bg1
-    int width, height, nrChannels;
-    unsigned char *data = stbi_load("ty.jpg", &width, &height, &nrChannels, STBI_rgb_alpha);
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        //glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load bg1" << std::endl;
-    }
-    stbi_image_free(data);
-}
-
 void timer(int value)
 {
     glutPostRedisplay();
@@ -1375,10 +1273,6 @@ int main(int argc, char **argv)
     glutDisplayFunc(displayIntro);
     glutMouseFunc(mouse);
     glutKeyboardFunc(keyboard);
-    loadIntro();
-    loadMoral();
-    // loadBackground();
-    // loadBackground2();
     glutTimerFunc(500, timer, 0);
     glEnable(GL_DEPTH_TEST);
     init();
